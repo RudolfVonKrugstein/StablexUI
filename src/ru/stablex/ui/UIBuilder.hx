@@ -571,32 +571,32 @@ class UIBuilder {
         //this
         while( erThis.match(code) ){
             if( thisClass == null ){
-                code = erThis.replace(code, '$1' + thisObj+'$2');
+                code = erThis.replace(code,erThis.matched(1) + thisObj+erThis.matched(2));
             }else{
-                code = erThis.replace(code, '$1cast(' + thisObj+', ' + thisClass + ')$2');
+                code = erThis.replace(code, erThis.matched(1) + 'cast(' + thisObj+', ' + thisClass + ')' + erThis.matched(2));
             }
         }
 
         //class names
         while( cls.match(code) ){
             if( !UIBuilder._imports.exists(cls.matched(2)) ) Err.trigger('Class is not imported: ' + cls.matched(2));
-            code = cls.replace(code, '$1' + UIBuilder._imports.get(cls.matched(2)) + '$3' );
+            code = cls.replace(code, cls.matched(1) + UIBuilder._imports.get(cls.matched(2)) + cls.matched(3) );
         }
 
         //widgets by id as specified class
         while( castId.match(code) ){
             if( !UIBuilder._imports.exists(castId.matched(2)) ) Err.trigger('Class is not imported: ' + castId.matched(2));
-            code = castId.replace(code, '$1ru.stablex.ui.UIBuilder.getAs("$3", ' + UIBuilder._imports.get(castId.matched(2)) + ')');
+            code = castId.replace(code, castId.matched(1) + 'ru.stablex.ui.UIBuilder.getAs("' + castId.matched(3) + '", ' + UIBuilder._imports.get(castId.matched(2)) + ')');
         }
 
         //widgets by ids
         while( id.match(code) ){
-            code = id.replace(code, '$1ru.stablex.ui.UIBuilder.get("$2")$3');
+            code = id.replace(code, id.matched(1) + 'ru.stablex.ui.UIBuilder.get("' + id.matched(2) + '")' + id.matched(3));
         }
 
         //arguments
         while( arg.match(code) ){
-            code = arg.replace(code, '$1__ui__arguments.$2');
+            code = arg.replace(code, arg.matched(1) + '__ui__arguments.' + arg.matched(2));
         }
 
         // Custom string replace
